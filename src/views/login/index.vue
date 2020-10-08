@@ -72,7 +72,7 @@ export default {
       isSendSmsLoding: false,
       loginData: {
         mobile: '',
-        code: '',
+        code: 246810,
       },
       fromRules: {
         mobile: [
@@ -105,8 +105,11 @@ export default {
       });
       login(this.loginData).then(res => {
         console.log("ss", res)
-        if (res.message === "OK")
+        if (res.data.message === "OK"){
           this.$Toast.success("登录成功！");
+          this.$store.commit('setUser',res.data.data)
+          this.$router.back()
+        }
       }).catch((err) => {
         console.log(err)
         this.$Toast.fail("登录失败,手机或验证码错误！")
