@@ -7,6 +7,7 @@ import { Toast } from 'vant';
 import 'vant/lib/index.css';
 import './styles/index.less'
 import 'amfe-flexible'
+import './utils/date'
 
 Vue.prototype.$Toast = Toast
 Vue.use(Vant);

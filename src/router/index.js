@@ -5,17 +5,17 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path:'/login',
+    path:'/',
     name:'login',
     component:() => import('@/views/login/')
   },
   {
-    path:'/',
+    path:'/layout',
     name:'layout',
     component:() => import('@/views/layout/'),
     children:[
       {
-        path:'',//默认子路由,
+        path:'/home',//默认子路由,
         name:'home',
         component:() => import('@/views/home/'),
       },

@@ -98,6 +98,7 @@ export default {
      * 万能验证码246810
      */
     onLogin() {
+      let my = this
       this.$Toast.loading({
         message: '登录中...',
         forbidClick: true,
@@ -108,7 +109,7 @@ export default {
         if (res.data.message === "OK"){
           this.$Toast.success("登录成功！");
           this.$store.commit('setUser',res.data.data)
-          this.$router.back()
+          this.$router.push('/home')
         }
       }).catch((err) => {
         console.log(err)

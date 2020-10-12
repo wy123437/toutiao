@@ -11,16 +11,19 @@
         >搜索</van-button
       >
     </van-nav-bar>
-    <van-tabs v-model="active"  swipeable animated>
-      <van-tab v-for="item in channeLsList" :key="item.id" :title="item.name">
-        内容 
+    
+    <van-tabs class="channel-tabs" v-model="active" swipeable color="#007cf9">
+      <van-tab  v-for="item in channeLsList" :key="item.id" :title="item.name">
+         <article-list :channel="item"></article-list>
       </van-tab>
     </van-tabs>
+   
   </div>
 </template>
 
 <script>
 import { getChannelsList } from '@/api/user'
+import articleList from '../components/article-list'
 export default {
   name: 'homeIndex',
   data() {
@@ -30,7 +33,9 @@ export default {
     };
   },
 
-  components: {},
+  components: {
+    articleList
+  },
 
   computed: {},
 
@@ -58,6 +63,12 @@ export default {
     width: 250px;
     background-color: #5babfb;
     font-size: 14px;
+  }
+}
+.channel-tabs{
+  /deep/ .van-tab{
+    border-right: 1px solid #edeff3;
+    border-bottom: 1px solid #edeff3;
   }
 }
 </style>
