@@ -12,7 +12,11 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <article-item v-for="item in list" :key="item.art_id" :article="item"></article-item>
+        <article-item
+          v-for="item in list"
+          :key="item.art_id"
+          :article="item"
+        ></article-item>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -21,6 +25,7 @@
 <script>
 import { getArticles } from '../../api/article'
 import articleItem from '../../components/articleItem'
+import { mapState } from 'vuex'
 export default {
   name: 'article-list',
   props: {
@@ -43,7 +48,9 @@ export default {
     articleItem
   },
 
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
 
   mounted() { },
 
@@ -55,13 +62,23 @@ export default {
         with_top: 1,
       }
       await getArticles(data).then(res => {
-        // console.log("文章数据",res.results)
-        this.list.push(...res.results)
-        this.loading = false
-        if (res.results.length) {
-          this.timestamp = res.pre_timestamp
+        //console.log("文章数据",res.results)
+        if (this.user) {
+          this.list.push(...res.results)
+          this.loading = false
+          if (res.results.length) {
+            this.timestamp = res.pre_timestamp
+          } else {
+            this.finished = true
+          }
         } else {
-          this.finished = true
+          this.list.push(...res.data.data.results)
+          this.loading = false
+          if (res.data.data.results.length) {
+            this.timestamp = res.data.data.pre_timestamp
+          } else {
+            this.finished = true
+          }
         }
       })
     },
@@ -73,9 +90,15 @@ export default {
       }
       await getArticles(data).then(res => {
         // console.log("文章数据",res.results)
-        this.list.unshift(...res.results)
-        console.log("文章数据", this.list)
-        this.refreshing = false
+        if (this.user) {
+          this.list.unshift(...res.results)
+          console.log("文章数据", this.list)
+          this.refreshing = false
+        } else {
+          this.list.unshift(...res.data.data.results)
+          console.log("文章数据", this.list)
+          this.refreshing = false
+        }
 
       })
     }

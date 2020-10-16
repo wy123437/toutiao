@@ -45,7 +45,7 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-    <div class="not-login" @click="$router.push('/login')" v-else>
+    <div class="not-login" @click="$router.push('/')" v-else>
       <img src="./下载.png" />
       <span>登录 / 注册</span>
     </div>
@@ -110,7 +110,7 @@ export default {
         .then(() => {
           this.$store.commit('setUser', null)
           removeItem('user')
-          this.$router.push('/login')
+          this.$router.push('/')
         })
         .catch(() => {
           // on cancel
