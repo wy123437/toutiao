@@ -9,6 +9,7 @@
         type="info"
         round
         size="small"
+        to="/serach"
         >搜索</van-button
       >
     </van-nav-bar>

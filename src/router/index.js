@@ -35,7 +35,12 @@ const routes = [
         component:() => import('@/views/video/'),
       },
     ]
-  }
+  },
+  {
+    path:'/serach',
+    name:'serach',
+    component:() => import('@/views/serach/'),
+  },
 
 ]
 
