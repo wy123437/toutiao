@@ -23,7 +23,9 @@
     <!-- 搜索历史 -->
     <serachHistory
       v-else
+      @search="onSearch"
       :searchHistoryList="searchHistoryList"
+      @update-historyData="updateHistoryData"
     ></serachHistory>
   </div>
 </template>
@@ -32,7 +34,7 @@
 import searchSuggest from "./comments/search-suggest"
 import serachHistory from './comments/serach-history'
 import serachResult from './comments/search-result'
-import { setItem, getItem } from '../../utils/storage'
+import { setItem, getItem, removeItem } from '../../utils/storage'
 import { mapState } from 'vuex'
 import { getSuggestHistories } from '../../api/search'
 export default {
@@ -51,13 +53,19 @@ export default {
     serachResult
   },
 
+  watch: {
+    searchHistoryList(){
+       setItem('search-history', this.searchHistoryList)
+    }
+  },
+
   computed: {
     ...mapState(['user'])
   },
 
   mounted() {
-    if (this.user)
-      this.getSuggestHistories()
+    // if (this.user)
+    //   this.getSuggestHistories()
   },
 
   methods: {
@@ -68,11 +76,11 @@ export default {
       }
 
       this.searchHistoryList.unshift(searchValue)
-      if (this.user) {
-        this.getSuggestHistories()
-      }
-      else
-        setItem('search-history', this.searchHistoryList)
+      // if (this.user) {
+      //   this.getSuggestHistories()
+      // }
+      // else
+      setItem('search-history', this.searchHistoryList)
 
       this.isShow = true
     },
@@ -81,6 +89,10 @@ export default {
       await getSuggestHistories().then(res => {
         this.searchHistoryList = [...new Set([...this.searchHistoryList, ...res.keywords])]
       })
+    },
+    updateHistoryData(arr) {
+      this.searchHistoryList = arr
+      removeItem('search-history')
     }
   },
 }
