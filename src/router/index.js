@@ -5,41 +5,47 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path:'/',
-    name:'login',
-    component:() => import('@/views/login/')
+    path: '/',
+    name: 'login',
+    component: () => import('@/views/login/')
   },
   {
-    path:'/layout',
-    name:'layout',
-    component:() => import('@/views/layout/'),
-    children:[
+    path: '/layout',
+    name: 'layout',
+    component: () => import('@/views/layout/'),
+    children: [
       {
-        path:'/home',//默认子路由,
-        name:'home',
-        component:() => import('@/views/home/'),
+        path: '/home',//默认子路由,
+        name: 'home',
+        component: () => import('@/views/home/'),
       },
       {
-        path:'/my',
-        name:'my',
-        component:() => import('@/views/my/'),
+        path: '/my',
+        name: 'my',
+        component: () => import('@/views/my/'),
       },
       {
-        path:'/qa',
-        name:'qa',
-        component:() => import('@/views/qa/'),
+        path: '/qa',
+        name: 'qa',
+        component: () => import('@/views/qa/'),
       },
       {
-        path:'/video',
-        name:'video',
-        component:() => import('@/views/video/'),
+        path: '/video',
+        name: 'video',
+        component: () => import('@/views/video/'),
       },
     ]
   },
   {
-    path:'/serach',
-    name:'serach',
-    component:() => import('@/views/serach/'),
+    path: '/serach',
+    name: 'serach',
+    component: () => import('@/views/serach/'),
+  },
+  {
+    path: '/article/:articleId',
+    name: 'article',
+    component: () => import('@/views/article/'),
+    props:true
   },
 
 ]

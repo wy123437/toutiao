@@ -35,3 +35,26 @@ export const getChannelsList = () => {
   })
 }
 
+/**
+ * 关注用户
+ */
+export const userFollowings = (target) => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/user/followings',
+    data:{
+      target:target
+    }
+  })
+}
+
+/**
+ * 关注用户
+ */
+export const userTarget = (target) => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/user/followings/${target}`,
+  })
+}
+

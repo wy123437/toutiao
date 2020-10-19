@@ -13,8 +13,8 @@
         @load="onLoad"
       >
         <article-item
-          v-for="item in list"
-          :key="item.art_id"
+          v-for="(item,index) in list"
+          :key="index"
           :article="item"
         ></article-item>
       </van-list>
