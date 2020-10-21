@@ -1,21 +1,38 @@
 <template>
-   <div class="qa-container">问答</div>
+   <div class="qa-container">
+     <test :list="testsss"></test>
+     <div>{{testsss}}</div>
+     <div @click="clikc">按钮哦</div>
+   </div>
 </template>
 
 <script>
+import test from './test';
 export default {
   name:'qaIndex',
   data() {
-    return {};
+    return {
+      testsss:[]
+    };
   },
 
-  components: {},
+  components: {
+    test
+
+  },
 
   computed:{},
 
-  mounted () {},
+  mounted () {
+   
+  },
 
-  methods: {},
+  methods: {
+    clikc(){
+      //this.testsss.unshift({name:1212})
+      console.log("testsss",this.testsss)
+    }
+  },
 }
 </script>
 

@@ -16,7 +16,7 @@
           :src="userInfoData.photo"
         />
         <div slot="title" class="name">{{ userInfoData.name }}</div>
-        <van-button size="small" round class="update-btn">编辑资料</van-button>
+        <van-button size="small" round class="update-btn" @click="$router.push('/userProfile')">编辑资料</van-button>
       </van-cell>
       <van-grid center class="gridStyle" :border="false">
         <van-grid-item>

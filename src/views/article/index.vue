@@ -5,43 +5,56 @@
         <van-icon name="ellipsis" size="22" />
       </template>
     </van-nav-bar>
-
-    <h1>{{ articleData.title }}</h1>
-    <van-cell class="user-info" center>
-      <div class="name" slot="title">{{ articleData.aut_name }}</div>
-      <van-image
-        class="img"
-        slot="icon"
-        fit="cover"
-        round
-        width="35"
-        height="35"
-        :src="articleData.aut_photo"
-      />
-      <div slot="label" class="label">
-        {{ articleData.pubdate | relativeTime }}
-      </div>
-      <van-button
-        class="btn"
-        :icon="articleData.is_followed ? 'success' : 'plus'"
-        :type="articleData.is_followed ? 'danger' : 'info'"
-        size="small"
-        round
-        :loading="isLoading"
-        @click="btnClick"
-        >{{ articleData.is_followed ? "已关注" : "关注" }}</van-button
+    <div class="markdown">
+      <h1>{{ articleData.title }}</h1>
+      <van-cell class="user-info" center>
+        <div class="name" slot="title">{{ articleData.aut_name }}</div>
+        <van-image
+          class="img"
+          slot="icon"
+          fit="cover"
+          round
+          width="35"
+          height="35"
+          :src="articleData.aut_photo"
+        />
+        <div slot="label" class="label">
+          {{ articleData.pubdate | relativeTime }}
+        </div>
+        <van-button
+          class="btn"
+          :icon="articleData.is_followed ? 'success' : 'plus'"
+          :type="articleData.is_followed ? 'danger' : 'info'"
+          size="small"
+          round
+          :loading="isLoading"
+          @click="btnClick"
+          >{{ articleData.is_followed ? "已关注" : "关注" }}</van-button
+        >
+      </van-cell>
+      <div
+        class="markdown-body"
+        v-html="articleData.content"
+        ref="articleContent"
+      ></div>
+      <comment-list
+        :source="articleId"
+        :list="commentList"
+        @updateTotal="totalCount = $event"
+        @replybtnClick="replybtnClick"
       >
-    </van-cell>
-    <div
-      class="markdown-body"
-      v-html="articleData.content"
-      ref="articleContent"
-    ></div>
+      </comment-list>
+    </div>
     <div class="article-bottom">
-      <van-button class="comment-btn" type="default" round size="small"
+      <van-button
+        class="comment-btn"
+        type="default"
+        round
+        size="small"
+        @click="commentShow = true"
         >写评论</van-button
       >
-      <van-icon name="chat-o" badge="9" color="#777" />
+      <van-icon name="chat-o" :badge="totalCount" color="#777" />
       <van-icon
         :name="articleData.is_collected ? 'star' : 'star-o'"
         :color="articleData.is_collected ? 'yellow' : '#777'"
@@ -55,6 +68,26 @@
       />
       <van-icon name="share" color="#777777" />
     </div>
+    <van-popup v-model="commentShow" position="bottom">
+      <post-comment
+        :target="articleId"
+        @closePost="commentShow = $event"
+        @post-success="onPostSuccess"
+      ></post-comment>
+    </van-popup>
+
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+      :style="{ height: '80%' }"
+    >
+      <comment-reply
+        v-if="isReplyShow"
+        @closeReply="isReplyShow = false"
+        :comment="replyComent"
+        :articleId="articleId"
+      ></comment-reply>
+    </van-popup>
   </div>
 </template>
 
@@ -63,6 +96,9 @@ import { getArticlesContent, startCollections, closeCollections, startlikings, c
 import { userFollowings, userTarget } from '../../api/user'
 import './github-markdown.css'
 import { ImagePreview } from 'vant';
+import commentList from './components/comment-list'
+import postComment from './components/post-comment'
+import commentReply from './components/comment-reply'
 
 export default {
   name: 'articleIndex',
@@ -77,11 +113,20 @@ export default {
       articleData: [],
       isLoading: false,
       isCollectedLoading: false,
-      isonLikingsLoading:false
+      isonLikingsLoading: false,
+      commentShow: false,
+      commentList: [],
+      totalCount: 0,
+      isReplyShow: false,
+      replyComent: {}
     };
   },
 
-  components: {},
+  components: {
+    commentList,
+    postComment,
+    commentReply
+  },
 
   computed: {},
 
@@ -143,7 +188,7 @@ export default {
         })
       }
     },
-    async onLikings(){
+    async onLikings() {
       this.isonLikingsLoading = true
       if (this.articleData.attitude === 1) {
         await closelikings(this.articleId).then(res => {
@@ -158,6 +203,16 @@ export default {
           this.$Toast.success("点赞成功")
         })
       }
+    },
+    onPostSuccess(data) {
+      console.log("his.commentList", this.commentList)
+      this.totalCount = this.totalCount + 1
+      this.commentList.unshift(data)
+    },
+    replybtnClick(comment) {
+      console.log("huif1", this.replyComent)
+      this.replyComent = comment
+      this.isReplyShow = true
     }
   },
 }
@@ -188,15 +243,17 @@ export default {
     width: 80px;
     height: 29px;
   }
-  .markdown-body {
-    padding: 14px;
+  .markdown {
     position: fixed;
     right: 0;
     left: 0;
-    top: 200px;
+    top: 46px;
     background-color: #ffffff;
     bottom: 42px;
     overflow-y: auto;
+  }
+  .markdown-body {
+    padding: 14px;
   }
   .article-bottom {
     height: 40px;
