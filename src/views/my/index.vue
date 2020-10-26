@@ -64,8 +64,8 @@
       />
       <div style="width: 100%; margin-top: 5px">
         <van-cell center title="消息通知" is-link />
-        <van-cell center title="小智同学" is-link />
-      </div>
+        <van-cell center title="小智同学" is-link to="/userchat"/>
+      </div>  
       <div style="width: 100%; margin-top: 5px">
         <van-button
           @click="leaveBtn"
